@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Drag and Drop Containers</title>
+  <style>
+    .container {
+      width: 500px;
+      height: 500px;
+      border: 2px solid black;
+      display: inline-block;
+      overflow: auto;
+      margin-right: 10px;
+    }
+    
+    .item {
+      width: 80px;
+      height: 40px;
+      margin: 10px;
+      cursor: move;
+    }
+    .icon.dragging {
+      opacity: 0.5;
+    }
+    .success-message {
+      display: none;
+      color:green;
+      position: absolute;
+      font-weight: bold;
+    }
+    @media (max-width: 600px) {
+      .container-wrapper {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  </style>
+  <body>
+    <H1>Drag and drop assignment</H1>
+    <div class="container" id="container1" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <img class="item" id="item1" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Instagram-Icon.png/480px-Instagram-Icon.png" onclick="preventImageClick(event)" draggable="true" ondragstart="drag(event)" alt="icon1">
+      <img class="item" id="item2" src="https://png.pngtree.com/png-vector/20230225/ourmid/pngtree-whatsapp-icon-social-media-png-image_6618452.png" onclick="preventImageClick(event)" draggable="true" ondragstart="drag(event)" alt="icon2">
+      <img class="item" id="item3" src="https://png.pngtree.com/png-vector/20221018/ourmid/pngtree-twitter-social-media-round-icon-png-image_6315985.png" onclick="preventImageClick(event)" draggable="true" ondragstart="drag(event)" alt="icon2">
+      <img class="item" id="item4" src="https://cdn3.iconfinder.com/data/icons/free-social-icons/67/facebook_circle_color-512.png" onclick="preventImageClick(event)" draggable="true" ondragstart="drag(event)" alt="icon2">
+      <img class="item" id="item5" src="https://static-00.iconduck.com/assets.00/gmail-icon-512x511-fih5xfbp.png" onclick="preventImageClick(event)" draggable="true" ondragstart="drag(event)" alt="icon2">
+      <div class="item" id="item6" draggable="true" ondragstart="drag(event)">Text1</div>
+      <div class="item" id="item7" draggable="true" ondragstart="drag(event)">Text2</div>
+      <div class="item" id="item8" draggable="true" ondragstart="drag(event)">Text3</div>
+      <div class="item" id="item9" draggable="true" ondragstart="drag(event)">Text4</div>
+    </div>
+    <div class="container" id="container2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <button onclick="resetContainers()">Reset</button>
+    <div id="success-message" class="success-message">Item dropped successfully!</div>
+  </body>
+  <script>
+    var successContainer = document.getElementById("successContainer");
+    var container1 = document.getElementById("container1");
+    var initialContainer1Content = container1.innerHTML;
+
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
+    function drag(event) {
+      event.dataTransfer.setData("text/plain", event.target.id);
+      event.target.classList.add("dragging");
+    }
+    function preventImageClick(event) {
+      event.preventDefault();
+    }
+
+    function drop(event) {
+      event.preventDefault();
+      var itemId = event.dataTransfer.getData("text/plain");
+      var item = document.getElementById(itemId);
+
+      if (event.target === item.parentNode) {
+        return; // Prevent dropping an item onto itself
+      }
+
+      if (event.target.classList.contains('item')) {
+        return; // Prevent dropping an item onto another item
+      }
+
+      event.target.appendChild(item);
+
+      var successMessage = document.getElementById("success-message");
+      successMessage.style.display="block"
+      setTimeout(function() {
+      successMessage.style.display = "none";
+      }, 1500);
+    }
+    function resetContainers() {
+      container1.innerHTML = initialContainer1Content;
+      container2.innerHTML = "";
+      successContainer.innerHTML = "";
+    }
+  </script>
+</head>
+</html>
